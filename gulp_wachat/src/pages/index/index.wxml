@@ -1,0 +1,379 @@
+<block wx:if="{{bgAudioStatus=='onPlay' && showBgAudioBtn}}">
+  <template is="homeplay" data="{{isIpx}}" />
+</block>
+  <view class="container">
+    <view class="home-bg"></view>
+    <template is="grow" wx:if="{{evaluationAvgScore}}"
+      data="{{user,evaluationAvgScore,compare_update_yesterday,defaultHead}}" />
+    <template is="topbanner" data="{{indicatorDots,autoplay,interval,duration,current,banner,circular}}" />
+    <template is="section" wx:if="{{isShowSection}}" />
+    <view class="radio">
+      <view class="radio_img"></view>
+      <swiper class="swiper_container" vertical="true" autoplay="true" circular="true" interval="3000">
+          <swiper-item wx:for="{{rankData}}" wx:key="index">
+            <view class="swiper_item">
+              <image class="swiper_img" src="{{item.user.headimgurl}}" mode="widthFix" />
+              <view class="swiper_txt">
+                <view class="txt_now">{{item.user.nickname}}</view>
+                <view>背诵测评获 {{item.score}} 分</view>
+              </view>
+            </view>
+          </swiper-item>
+      </swiper>
+    </view>
+    <block wx:for="{{homeConfigList}}" wx:key="index">
+      <block wx:if="{{item.type=='page'}}">
+        <!-- 展示任意页面 -->
+        <template is="page" data="{{item}}" />
+      </block>
+      <block wx:elif="{{item.type=='wx_app'}}">
+        <!-- 展示小程序 -->
+      </block>
+      <block wx:elif="{{item.type=='daily'}}">
+        <!-- 展示诗词学习计划 -->
+        <template is="dayrecord" data="{{dayRecord,userDayRecord,drContinueDay,dayRecordRank}}" />
+      </block>
+      <block wx:elif="{{item.type=='column'}}">
+        <!-- 展示名家专栏 -->
+        <template is="column" data="{{ColumnList}}" />
+      </block>
+      <block wx:elif="{{item.type=='hot'}}">
+        <!-- 展示热门作品 -->
+        <template is="hot" data="{{EveryDayOfHotRecord,newNumber}}" />
+      </block>
+      <block wx:elif="{{item.type=='study'}}">
+        <!-- 展示每日推荐 -->
+        <template is="study" data="{{LastVideo,isPause,isCover}}" />
+      </block>
+      <!-- 展示累计作品数量 -->
+      <block wx:elif="{{item.type=='work_num'}}">
+        <!-- <template is="worknum" data="{{newNumber}}" /> -->
+      </block>
+      <block wx:else>
+        <!-- 匹配不到 -->
+        <template is="page" data="{{item}}" />
+      </block>
+    </block>
+  </view>
+  <view style="background-color: #F4F4F4">
+    <official-account binderror="binderror"></official-account>
+    <copyright></copyright>
+  </view>
+  <view style="height: 190rpx; background-color: #F4F4F4"></view>
+<canvasdrawer painting="{{Forwarding}}" class="canvasdrawer" bind:getImage="eventGetImageForwarding" />
+<!-- 广告 -->
+<view wx:if="{{showAd}}" class="Ad">
+  <view class="img" bindtap="toAdlink">
+    <image mode="aspectFit" src="{{FloatBanner.ad_cover}}"></image>
+  </view>
+  <view class="cancel" bindtap="cancelpop">
+    <image src="../../img/home/closeBtn.png"></image>
+  </view>
+</view>
+
+<!-- 书签领取弹窗 -->
+<view class="pop-pic" bindtap="cancelPop" wx:if="{{isPopPic}}" style="top:0">
+  <view class="bookimg"
+    style="background:url('{{popPicUrl}}');background-size: 540rpx 123%; background-position: 0px 0px;"
+    catchtap="picblock"></view>
+  <view class="book-btn" bindtap="saveToAlbum">
+    <image class="icon" src="downmark.png"></image>
+    <view class="txt">领取书签</view>
+  </view>
+  <view class="pop-hint">{{popPicUrl? '保存书签，分享给更多好友':''}}</view>
+</view>
+
+<!-- 授权弹窗 -->
+<view class="save-panel" bindtap="cancelPick" wx:if="{{needSaveAuthor}}" style="top:0">
+  <view class="wrap">
+    <text class="title">请求保存相册授权</text>
+    <text class="content">小程序必须获取保存相册授权，才能保存图片。请点击重新授权后，把保存相册功能打开.</text>
+    <button open-type="openSetting" bindopensetting="hander">
+      <view class="yes">重新授权</view>
+    </button>
+  </view>
+</view>
+
+<!-- 轮播banner -->
+<template name="topbanner">
+  <swiper indicator-dots="{{indicatorDots}}" indicator-color="rgba(255,255,255,0.5)"
+    indicator-active-color="rgb(255,255,255)" autoplay="{{autoplay}}" interval="{{interval}}" circular="{{circular}}"
+    duration="{{duration}}" current="{{current}}">
+    <block wx:for="{{banner}}" wx:key='index'>
+      <swiper-item bindtap="activityClick" data-index="{{index}}">
+        <form report-submit class="form" bindsubmit="formSubmit">
+          <button formType="submit" class="from-btn">
+            <image src="{{item.cover}}" class="slide-image" mode="aspectFill" />
+          </button>
+        </form>
+      </swiper-item>
+    </block>
+  </swiper>
+</template>
+
+<!-- 功能区 -->
+<template name="section">
+  <view class="section">
+    <view class="flexwrp">
+      <view class="flexitem" bindtap="toChinese">
+        <image class="itemimg" src="https://qcdn.beautifulreading.com/153b03ae1795f080e390403969d06627"></image>
+        <text class="text">语文课本</text>
+      </view>
+      <view class="flexitem" bindtap="toMongoliaLearn">
+        <image class="itemimg" src="https://qcdn.beautifulreading.com/bd3c03ec6decb3fe62963bdcfd9f068d"></image>
+        <text class="text">蒙学</text>
+      </view>
+      <view class="flexitem" bindtap="toActivityList">
+        <image class="itemimg" src="https://qcdn.beautifulreading.com/57be24cdb30738e5dedabb563f0e7f85"></image>
+        <text class="text">活动专区</text>
+      </view>
+      <view class="flexitem" bindtap="toareaYe">
+        <image class="itemimg" src="https://qcdn.beautifulreading.com/c0f0e412db3b8e4c51f4458265ce5d05"></image>
+        <text class="text">叶嘉莹专区</text>
+      </view>
+      <view class="flexitem" bindtap="toEvaluation">
+        <image class="itemimg" src="https://qcdn.beautifulreading.com/8802c001b17647cb1520fcd3f525f680"></image>
+        <text class="text">背诵测评</text>
+      </view>
+      <view class="flexitem" bindtap="toSong">
+        <image class="itemimg" src="https://qcdn.beautifulreading.com/30c53d6ff0baf960b1cdecb381f60a45"></image>
+        <text class="text">吟唱学习</text>
+      </view>
+      <view class="flexitem" bindtap="toanswer">
+        <image class="itemimg" src="https://qcdn.beautifulreading.com/4065bed289b1beae6455cc6ee351f675"></image>
+        <text class="text">答题闯关</text>
+      </view>
+      <view class="flexitem" bindtap="toHoliday">
+        <!--  https://qcdn.beautifulreading.com/94daeee6eb0d1cc0cbc0f0c8571aa0a6 -->
+        <image class="itemimg" src="https://qcdn.beautifulreading.com/821f48c8aa773020699cb7401dd78455"></image>
+        <text class="text">寒假读诗</text>
+      </view>
+      
+      <!-- <view class="flexitem" bindtap="tospring">
+                      <image class="itemimg" src="../../img/home/home_icon_haoshi.png"></image>
+                      <text class="text">对联</text>
+                  </view> -->
+    </view>
+  </view>
+</template>
+
+<!-- 读诗打卡 -->
+<template name="dayrecord">
+  <block wx:if="{{dayRecord}}">
+    <!-- 新UI -->
+    <view class="dr_view_new">
+      <!-- 标题 -->
+      <view class="daily-head">
+        <image class="tagimg" src="https://qcdn.beautifulreading.com/79cf52bd241e71d1b0e5bfc708b7ff9c"></image>
+        <view class="name">{{dayRecord.name}}</view>
+        <view class="days">你已连续学习 <text> {{drContinueDay}} </text>天</view>
+      </view>
+      <!-- 打卡情况 -->
+      <view class="dr_record_card">
+        <view class="dr_record_view">
+          <view class="dr_record_left">
+            <view class="dr_record_title">《{{dayRecord.poem.shortName}}》
+              <text wx:if="{{dayRecord.poem.author}}">{{dayRecord.poem.author}}</text>
+            </view>
+            <block wx:if="{{userDayRecord && userDayRecord.today}}">
+              <view class="dr_record_no_rank" bindtap="dayRankTap">今日你获赞 {{userDayRecord.today.like_count}}，排名
+                {{userDayRecord.today.rank}} >
+              </view>
+            </block>
+            <block wx:else>
+              <view class="dr_record_no_rank">你今天还没打卡学习哦</view>
+            </block>
+          </view>
+          <block wx:if="{{(userDayRecord && userDayRecord.today)}}">
+            <!-- 分享 -->
+            <button class="dr_button_share1" open-type='share' data-item="dayRecordShare">分享作品</button>
+          </block>
+          <block wx:else>
+            <!-- 立即打卡 -->
+            <view class="dr_record_right1" bindtap="dayRecordTap">打卡学习</view>
+          </block>
+        </view>
+        <!-- 每日之星 -->
+        <view class="dr_rank_view1" bindtap="recordRankTap">
+          <view class="dr_rank_title">
+            每日一星 <text wx:if="{{dayRecordRank}}">{{dayRecordRank.mdDate}}</text>
+          </view>
+          <view class="dr_rank_content">
+            <view class="dr_rank_head1" wx:if="{{dayRecordRank}}">
+              <image class="dr_rank_head_icon1" src="{{dayRecordRank.user.headimgurl}}" mode="aspectFill"></image>
+              <image class="rank_icon1" src="https://qcdn.beautifulreading.com/58f344660d8f5b91cd6fc9e22182b683" />
+            </view>
+            <block wx:if="{{(dayRecordRank && dayRecordRank.user)}}">
+              <view class="dr_rank_name1">{{dayRecordRank.user.nickname}}</view>
+              <image class="right_icon" src="https://qcdn.beautifulreading.com/39b75ac956b890ebeaab53e7faf250a8" />
+            </block>
+            <block wx:else>
+              <view class="dr_rank_name1">排名第1的，可获得每日一星哦</view>
+            </block>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="courseline"></view>
+  </block>
+  <block wx:else>
+    <view class="place_white" />
+  </block>
+</template>
+
+<!-- 通用模块 -->
+<template name="page">
+  <view class="daily-block" bindtap="commonPageTap" data-item="{{item}}">
+    <view class="daily-head">
+      <image class="tagimg"
+        src="{{item.icon?item.icon:'https://qcdn.beautifulreading.com/972547f302c324c64031814de785cfb0'}}"></image>
+      <view class="date" style="font-weight: bold;">{{item.title}}</view>
+      <view>{{item.sub_title}}</view>
+    </view>
+    <view class="daily-class">
+      <image class="bgimgday" mode="widthFix" src="{{item.cover}}"></image>
+    </view>
+  </view>
+  <view class="courseline"></view>
+</template>
+
+<!-- 名家专栏 -->
+<template name="column">
+  <block wx:if="{{ColumnList}}">
+    <view class="daily-block" style="height: 100%!important" bindtap="navcolumn">
+      <view class="daily-head">
+        <image class="tagimg" src="https://qcdn.beautifulreading.com/e8dec848d9cd0e371b1a8da562b8aa20"></image>
+        <view class="date" style="font-weight: bold;">名家专栏</view>
+        <view>{{ColumnList[0].subscribe_num}}人订阅</view>
+      </view>
+      <view class="daily-body" wx:if="{{ColumnList[0].column_banner}}"
+        style="height: 300rpx;background:url({{ColumnList[0].column_banner}});background-size: 100% 100%;">
+      </view>
+      <view class="daily-body" wx:else style="height: 300rpx">
+      </view>
+    </view>
+    <view class="courseline"></view>
+  </block>
+  <block wx:else>
+    <view class="place_white" />
+  </block>
+</template>
+
+<!-- 每日学习 -->
+<template name="study">
+  <block wx:if="{{LastVideo}}">
+    <view class="daily-block">
+      <view class="daily-head">
+        <image class="tagimg" src="https://qcdn.beautifulreading.com/7209c26b06b21d09b565cad03d023720"></image>
+        <view class="date" style="flex: 1;"><text style="font-weight: bold;">今日推荐·</text>每日一听</view>
+        <text class="stag">学习强国同步推送</text>
+      </view>
+      <view class="daily-class">
+        <block wx:if="{{isCover}}">
+          <image bindtap="playVideo" class="playicon" src="https://qcdn.beautifulreading.com/fe7bb4abf37844b0d5683110f9683ed7"></image>
+          <image bindtap="playVideo" class="video" mode="aspectFill" src="{{LastVideo.url}}?vframe/jpg/offset/2/w/750"></image>
+        </block>
+        <block wx:else>
+          <video class="video"
+            src="{{LastVideo.url_hls}}" 
+            controls 
+            autoplay
+            enable-play-gesture
+            bindplay="videoplay"
+            bindpause="videopause"
+            bindended="videoend"/>
+        </block>
+        <view class="title" wx:if="{{isPause}}">
+          <view class="txt">{{LastVideo.name}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="courseline"></view>
+  </block>
+  <block wx:else>
+    <view class="place_white" />
+  </block>
+</template>
+
+<!-- 热门作品 -->
+<template name="hot">
+  <block wx:if="{{EveryDayOfHotRecord && EveryDayOfHotRecord.length>0}}">
+    <view class="hot">
+      <image src="https://qcdn.beautifulreading.com/986d688081f7b06cc4079c55c7ed7d59" class="hotbg"></image>
+      <view class="hotwork">
+        <text class="hotworknum" wx:for="{{newNumber}}" wx:key="index">{{item}}</text>
+        <text class="hotworktitle">累计收录作品数</text>
+      </view>
+      <view class="hotpic">
+        <image src="https://qcdn.beautifulreading.com/178401c6dbbec4991b919b6e363120fc"></image>
+        <text>热门作品</text>
+      </view>
+      <view class="HotList">
+        <view class='hot-detail'>
+          <view wx:for="{{EveryDayOfHotRecord}}" wx:key="index" data-index="{{index}}" class='hot_item'
+            data-recordId="{{item.recordId}}" data-poemId="{{item.record.poem.poemId}}" bindtap="torecord">
+            <view class="hot_item_img">
+              <view class="hot_headimg" style="background-image:url({{item.record.user.headimgurl}});"></view>
+            </view>
+            <view class="hot_item_text">
+              <view class="hot_item_poem_name">
+                <view class="poemName nowrap-one">
+                  {{item.record.poem.name}}
+                </view>
+                <view class="hot_item_nickname">
+                  <view class="nowrap-one nickname">朗诵:{{item.record.user.nickname}}</view>
+                  <view class="like">
+                    <image src="../../img/home/flower.png" style="width:30rpx;height: 30rpx;"></image>
+                    <view class="likename">{{item.record.likeCount}}</view>
+                  </view>
+                </view>
+              </view>
+              <view class="hot_item_text_more">
+                <image src="https://qcdn.beautifulreading.com/838433170b8d682c55d78b094eb625e8"
+                  style="width:44rpx;height: 44rpx;"></image>
+              </view>
+              <!-- <view class="hot_item_text_more_like">
+
+                            </view> -->
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+  <block wx:else>
+  </block>
+</template>
+
+<!-- 累计收录作品数 -->
+<!-- <template name="worknum">
+  <block wx:if="{{newNumber}}">
+    <view class="timer">
+      <view class="timerwrp">
+        <view class="img"></view>
+        <view class="numwrap">
+          <view class="timeritem">
+            <view class="item" wx:for="{{newNumber}}" wx:key="{{index}}">{{item}}</view>
+          </view>
+          <view class="many">累计收录作品数</view>
+        </view>
+      </view>
+    </view>
+  </block>
+  <block wx:else>
+    <view class="place_white" />
+  </block>
+</template> -->
+
+<!-- 我的成长 -->
+<template name="grow">
+  <view class="grow" bindtap="routeGrowupPage">
+    <view class="left">
+      <image mode="aspectFill" src="{{user.headimgurl?user.headimgurl:defaultHead}}" />
+      <text>我的成长</text>
+    </view>
+    <view class="right">
+      <text>今日已学诗{{evaluationAvgScore.today_update_count?evaluationAvgScore.today_update_count:0}}首，比昨天{{compare_update_yesterday?compare_update_yesterday:"+0"}} ></text>
+    </view>
+  </view>
+</template>

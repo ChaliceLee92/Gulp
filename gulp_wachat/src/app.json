@@ -1,0 +1,48 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/class/class",
+    "pages/poem/poem",
+    "pages/me/me",
+    "pages/login/login"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "最美诵读",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#c0c4cc",
+    "selectedColor": "#1f1f21",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tabiconHome.png",
+        "selectedIconPath": "images/tabiconHomeActived.png"
+      },
+      {
+        "pagePath": "pages/class/class",
+        "text": "班级",
+        "iconPath": "images/tabiconclass.png",
+        "selectedIconPath": "images/tabiconclass_actived.png"
+      },
+      {
+        "pagePath": "pages/poem/poem",
+        "text": "诗集",
+        "iconPath": "images/tabicon1.png",
+        "selectedIconPath": "images/tabicon1Actived.png"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "text": "我的",
+        "iconPath": "images/tabicon2.png",
+        "selectedIconPath": "images/tabicon2Actived-v2.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

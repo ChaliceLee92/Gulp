@@ -1,0 +1,6 @@
+{
+    "navigationBarBackgroundColor": "#FFDD51",
+    "usingComponents": {
+        "s-login": "/components/s-login/index"
+    }
+}

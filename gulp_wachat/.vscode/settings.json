@@ -1,0 +1,21 @@
+{
+  "editor.tabSize": 4,
+  "editor.formatOnSave": false,
+  "prettier.semi": false,
+  "prettier.singleQuote": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "files.associations": {
+    ".wxss": "css",
+    "*.wxs": "javascript"
+  },
+  "emmet.includeLanguages": {
+    "wxml": "html"
+  },
+  "minapp-vscode.disableAutoConfig": true
+}

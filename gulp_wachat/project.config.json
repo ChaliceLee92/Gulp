@@ -1,0 +1,16 @@
+{
+	"client": "dist/",
+	"svr": "server/",
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true
+	},
+	"appid": "wx19959868d0df5d27",
+	"projectname": "wechat_mini",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {}
+}
